@@ -1,15 +1,18 @@
 # Question 6 | Storage, PV, PVC, Pod volume
 
-## Create a new PersistentVolume named safari-pv. 
+### 1. Create a new PersistentVolume named safari-pv. 
 It should have a capacity of 2Gi, accessMode ReadWriteOnce, hostPath /Volumes/Data and no storageClassName defined.
-## Next create a new PersistentVolumeClaim in Namespace project-tiger named safari-pvc. 
+
+### 2. Next create a new PersistentVolumeClaim in Namespace project-tiger named safari-pvc. 
 It should request 2Gi storage, accessMode ReadWriteOnce and should not define a storageClassName. The PVC should bound to the PV correctly.
-## Finally create a new Deployment safari in Namespace project-tiger. 
+
+### 3. Finally create a new Deployment safari in Namespace project-tiger. 
 Which mounts that volume at /tmp/safari-data. 
 The Pods of that Deployment should be of image httpd:2.4.41-alpine.
 
 ### PersistentVolume: safari-pv
 
+```yaml
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -21,9 +24,11 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: "/Volumes/Data"
+```    
 
 ### PersistentVolumeClaim: safari-pvc
 
+```yaml
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -35,9 +40,11 @@ spec:
   resources:
     requests:
      storage: 2Gi
+```     
 
 ### Deployment: safari
 
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -63,5 +70,5 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /tmp/safari-data
-
+```
 
