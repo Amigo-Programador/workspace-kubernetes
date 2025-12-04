@@ -1,6 +1,4 @@
-KUBERNETES
-
-# Problema con Calico
+# Error con pods NFS
 
 ### El POD NFS no puede terminar de crearse
 nfs-client-provisioner-cdd74758b-pcq98   0/1     ContainerCreating   0              23h
