@@ -1,39 +1,64 @@
 KUBERNETES
 
 # Problema con Calico
-## Log del pod al intentar crearlo
+
+### El POD NFS no puede terminar de crearse
+nfs-client-provisioner-cdd74758b-pcq98   0/1     ContainerCreating   0              23h
+
 ### Calico intenta consultar al API Server para obtener ClusterInformation, pero no tiene autorizacion
-Warning  FailedCreatePodSandBox  8s                 kubelet            Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "deeade4d75ecb635d10754973b454409b0d393330b75d4bddc28f576c0059f71": plugin type="calico" failed (add): error getting ClusterInformation: connection is unauthorized: Unauthorized
-  Normal   SandboxChanged          4s (x12 over 15s)  kubelet            Pod sandbox changed, it will be killed and re-created.
-  Warning  FailedCreatePodSandBox  4s (x4 over 7s)    kubelet            (combined from similar events): Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "d4a4d41d8af55491f5e2e4f57916bb9f2e66d81cfb92799fac7919c93af43555": plugin type="calico" failed (add): error getting ClusterInformation: connection is unauthorized: Unauthorized
+Warning  FailedCreatePodSandBox  42s (x1573 over 23h)  kubelet            (combined from similar events): Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "e1ae60874da1030ec7cd39bc1d0ca11f474f5ccb5be6aba5e2f0fd633bce86da": plugin type="calico" failed (add): error getting ClusterInformation: connection is unauthorized: Unauthorized
 
-
-## Si no tienes acceso, porque falta permites de lectura al kubelet.conf
-kubelet.conf > Permite el acceso de al API Server
-
-Ejecutar:
+### El worker node tiene acceso al API Server?
+#### 1. Validar los permisos, archivo kubelet.conf > Permite el acceso de al API Server
+Por ejemplo si el archivo tiene los permisos 644:
 sudo chmod 644 /etc/kubernetes/kubelet.conf
 
-## OJO! 
-### Al hacer esto en el Worker Node
 kubelet puede estar negándose a usar kubelet.conf por terner permisos demasiado abiertos
 Kubernetes ES ESTRICTO con los permisos de credenciales sensibles, entonces lo RECHAZA por seguridad.
 
-### Solucion: darle a  kubelet.conf permisos de lectura solamente al usuario root
+#### 2. Darle a  kubelet.conf permisos de lectura solamente al usuario root
 sudo chmod 600 /etc/kubernetes/kubelet.conf  
-### Deberia quedar asi
+
+Para que solo el root tenga acceso y kubernetes no daria error.
 -rw------- 1 root root kubelet.conf
 
-### Luego reinicia kubelet
+#### 3. Luego reinicia kubelet
 sudo systemctl restart kubelet
 
-### Elimina el pod Calico, para que Kubernetes lo recree automaticamente
-kubectl get pods -n kube-system -o wide | grep worker1
-kubectl delete pod -n kube-system <nombre-del-calico-node>
+#### 4. Validar conexion del worker node hacien el API Server (MASTER NODE)
+curl -k https://192.168.18.120:6443/version
+
+Deberia dar la informacion basica del API Server (Significa que si hay conexion)
+{
+  "major": "1",
+  "minor": "30",
+  "gitVersion": "v1.30.14",
+  "gitCommit": "9e18483918821121abdf9aa82bc14d66df5d68cd",
+  "gitTreeState": "clean",
+  "buildDate": "2025-06-17T18:29:20Z",
+  "goVersion": "go1.23.10",
+  "compiler": "gc",
+  "platform": "linux/amd64"
+}
+
+### En POD NFS no llega 1/1 Running?
+
+#### Valida que la IP de la VM NFS sea el mismo que el deployment NFS 
+nfs-deployment
+- name: NFS_SERVER
+  value: 192.168.18.122
+
+nfs server (ip addr)
+192.168.18.126  #La ip a cambiado
 
 
-## OTRA COSA QUE VALIDAR!!
-### Que el servidor NFS este correctamente configurado, en caso haya cambiado de IP, se debe actualizar la IP
+####  Elimina el pod NFS
+kubectl delete deployment nfs
+kubectl delete pod nfs-123 --force
+
+#### Crear denuevo el manifest del deploymen, con la IP correcta
+vim  nfs-deployment.yaml
+```yaml
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -72,6 +97,7 @@ spec:
           nfs:
             server: 192.168.18.126    	#ACTUALIZAR DE SER NECESARIO
             path: /srv/nfs/k8s   	#Carpeta exportada del NFS
+```
 
-
-### Luego eliminar el pod manualmente y esperar que el deployment vuelva a crearlo, esta vez con la IP correcta del servidor NFS            
+####  Cree el deployment
+kubectl -f apply nfs-deployment.yaml
