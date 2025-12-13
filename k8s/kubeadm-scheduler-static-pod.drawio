@@ -1,0 +1,80 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0" version="29.2.7">
+  <diagram name="Página-1" id="R7D1iXwCx4_ySJFP4wuE">
+    <mxGraphModel dx="1909" dy="577" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="01jerRT9VymWbXtPsbqo-2" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="MASTER NODE" vertex="1">
+          <mxGeometry height="390" width="590" x="40" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-3" parent="01jerRT9VymWbXtPsbqo-2" style="whiteSpace=wrap;html=1;" value="kube-apiserver" vertex="1">
+          <mxGeometry height="40" width="120" x="310" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-4" parent="01jerRT9VymWbXtPsbqo-2" style="whiteSpace=wrap;html=1;" value="kube-controller-manager" vertex="1">
+          <mxGeometry height="40" width="200" x="310" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-5" parent="01jerRT9VymWbXtPsbqo-2" style="whiteSpace=wrap;html=1;" value="&lt;strike&gt;kube-scheduler&lt;/strike&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="310" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-7" edge="1" parent="01jerRT9VymWbXtPsbqo-2" source="01jerRT9VymWbXtPsbqo-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="01jerRT9VymWbXtPsbqo-3" value="static pod">
+          <mxGeometry relative="1" x="0.6226" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="110" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-9" edge="1" parent="01jerRT9VymWbXtPsbqo-2" source="01jerRT9VymWbXtPsbqo-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="01jerRT9VymWbXtPsbqo-4" value="static pod">
+          <mxGeometry relative="1" x="0.2308" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-10" edge="1" parent="01jerRT9VymWbXtPsbqo-2" source="01jerRT9VymWbXtPsbqo-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="01jerRT9VymWbXtPsbqo-5" value="static pod">
+          <mxGeometry relative="1" x="0.6227" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="110" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-6" parent="01jerRT9VymWbXtPsbqo-2" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="/etc/kubernetes/manifests/" vertex="1">
+          <mxGeometry height="30" width="150" x="30" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-14" edge="1" parent="1" source="01jerRT9VymWbXtPsbqo-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="01jerRT9VymWbXtPsbqo-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-70" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-13" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;fontColor=light-dark(#000000,#000000);darkOpacity=0.05;fillColor=light-dark(#FFF2A1,#FFFF99);strokeColor=none;fillStyle=solid;direction=west;gradientDirection=north;gradientColor=none;shadow=1;size=20;pointerEvents=1;fontStyle=1" value="kubelet&lt;div&gt;monitorea continuamente&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="190" x="-170" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-16" edge="1" parent="1" source="01jerRT9VymWbXtPsbqo-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="01jerRT9VymWbXtPsbqo-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-15" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;fontColor=light-dark(#000000,#000000);darkOpacity=0.05;fillColor=light-dark(#FFF2A1,#FFFF99);strokeColor=none;fillStyle=solid;direction=west;gradientDirection=north;gradientColor=none;shadow=1;size=20;pointerEvents=1;fontStyle=1" value="si desaparece el manifest yaml&lt;div&gt;kubelet elimina el pod&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="190" x="680" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-21" edge="1" parent="1" source="01jerRT9VymWbXtPsbqo-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="01jerRT9VymWbXtPsbqo-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-22" edge="1" parent="1" source="01jerRT9VymWbXtPsbqo-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="01jerRT9VymWbXtPsbqo-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-17" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;fontColor=light-dark(#000000,#FFFFFF);darkOpacity=0.05;fillColor=light-dark(#FFF9B2,#FF0000);strokeColor=none;fillStyle=solid;direction=west;gradientDirection=north;gradientColor=none;shadow=1;size=20;pointerEvents=1;fontStyle=1" value="si desaparece el scheduler" vertex="1">
+          <mxGeometry height="30" width="140" x="340" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-18" edge="1" parent="1" source="01jerRT9VymWbXtPsbqo-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="01jerRT9VymWbXtPsbqo-17" value="delete">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-19" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="no se programan nuevos pods" vertex="1">
+          <mxGeometry height="30" width="100" x="300" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="01jerRT9VymWbXtPsbqo-20" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="pods quedan en&lt;div&gt;&lt;b&gt;Pendint&lt;/b&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="100" x="440" y="640" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
