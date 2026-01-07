@@ -51,12 +51,15 @@ kind: Ingress
 metadata:
   name: echo-ingress
   namespace: sound
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx
   rules:
     - host: amigo.programador.org
       http:
         paths:
-          - path: /
+          - path: /echo-path
             pathType: Prefix
             backend:
               service:
