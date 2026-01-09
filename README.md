@@ -1,15 +1,17 @@
 # Gateway API - Ingress
 
-## 1. installing the Gateway API CRDs from the official repo
+## 1. Instala CRDs de Gateway API, RBAC, Políticas y validaciones
 
-kubectl kustomize "https://github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.1.0" | kubectl apply -f -
+# kubectl kustomize "https://github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.1.0" | kubectl apply -f -
 
 kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
 
 
-## 2. Install NGINX Gateway Controller
+## 2. Instala CRDs propias del controlador NGINX Gateway Fabric
 
 kubectl apply -f https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v1.6.2/deploy/crds.yaml
+
+## 3. Instala el controlador NGINX Gateway Fabric [namespace, service account, RBAC, deployment]
 
 kubectl apply -f https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v1.6.2/deploy/default/deploy.yaml
 
@@ -17,16 +19,55 @@ kubectl get pods -n nginx-gateway
 
 
 
-## 3. create a TLS certificate
+## 4. Crea un TLS certificate  
 
 openssl req -x509 -nodes -days 365 -newkey rsa:2048   -keyout tls.key -out tls.crt -subj "/CN=api.zenhost.local/O=zenhost"
 
 
-## 4. create the secret:
+## 5. Crea  un secret: [tls.crt → el certificado y tls.key → la clave privada]
 
 kubectl create secret tls zenhost-cert --cert=tls.crt --key=tls.key
 
-## 5. create Ingress from yaml
+## 6. Crea un deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - image: nginx
+        name: web
+        ports:
+        - containerPort: 80
+          protocol: TCP
+
+## 7. Crea un service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  selector:
+    app: web
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  type: ClusterIP
+
+## 8. create Ingress from yaml
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -47,11 +88,11 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: echo-service
+            name: web-service
             port:
               number: 80
 
-## 5. create Gateway from yaml
+## 9. create Gateway from yaml
 
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
@@ -70,7 +111,7 @@ spec:
       - kind: Secret
         name: web-tls
 
-## 5. create HTTPRoute from yaml
+## 10. create HTTPRoute from yaml
 
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
