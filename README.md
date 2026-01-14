@@ -1,39 +1,41 @@
 # Gateway API - Ingress
 
 ## 1. Instala CRDs de Gateway API, RBAC, Políticas y validaciones
-
-# kubectl kustomize "https://github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.1.0" | kubectl apply -f -
-
+```yaml
 kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
-
+```
 
 ## 2. Instala CRDs propias del controlador NGINX Gateway Fabric
-
+```yaml
 kubectl apply -f https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v1.6.2/deploy/crds.yaml
+```
 
 ## 3. Instala el controlador NGINX Gateway Fabric [namespace, service account, RBAC, deployment]
-
+```yaml
 kubectl apply -f https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v1.6.2/deploy/default/deploy.yaml
-
+```
+Luego valida el Pod Gateway Fabric Controller que se ha creado
+```yaml
 kubectl get pods -n nginx-gateway
-
+```
 
 
 ## 4. Crea un TLS certificate  
-
-openssl req -x509 -nodes -days 365 -newkey rsa:2048   -keyout tls.key -out tls.crt -subj "/CN=api.zenhost.local/O=zenhost"
-
+```yaml
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=amigo.programador/O=example" -addext "subjectAltName=DNS:amigo.programador"
+```
 
 ## 5. Crea  un secret: [tls.crt → el certificado y tls.key → la clave privada]
-
-kubectl create secret tls zenhost-cert --cert=tls.crt --key=tls.key
+```yaml
+kubectl create secret tls tls-certificado --cert=tls.crt --key=tls.key
+```
 
 ## 6. Crea un deployment
-
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-deployment
+  name: web-deploy
 spec:
   replicas: 2
   selector:
@@ -50,9 +52,10 @@ spec:
         ports:
         - containerPort: 80
           protocol: TCP
+```
 
 ## 7. Crea un service
-
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -66,9 +69,10 @@ spec:
     protocol: TCP
     targetPort: 80
   type: ClusterIP
+```
 
-## 8. create Ingress from yaml
-
+## 8. create Ingress
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -76,12 +80,13 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
+  ingressClassName: nginx
   tls:
   - hosts:
-    - api.zenhost.local
-    secretName: zenhost-cert
+    - amigo.programador
+    secretName: tls-certificado
   rules:
-  - host: api.zenhost.local
+  - host: amigo.programador
     http:
       paths:
       - path: /
@@ -91,28 +96,30 @@ spec:
             name: web-service
             port:
               number: 80
+```
 
-## 9. create Gateway from yaml
-
+## 9. Crear el Gateway
+```yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: web-gateway
 spec:
-  gatewayClassName: nginx-class
+  gatewayClassName: nginx
   listeners:
   - name: https
     protocol: HTTPS
     port: 443
-    hostname: gateway.web.k8s.local
+    hostname: amigo.programador
     tls:
       mode: Terminate
       certificateRefs:
       - kind: Secret
-        name: web-tls
+        name: tls-certificado
+```
 
-## 10. create HTTPRoute from yaml
-
+## 10. Crear el HTTPRoute
+```yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -121,7 +128,7 @@ spec:
   parentRefs:
   - name: web-gateway
   hostnames:
-  - "gateway.web.k8s.local"
+  - "amigo.programador"
   rules:
   - matches:
     - path:
@@ -130,3 +137,4 @@ spec:
     backendRefs:
     - name: web-service
       port: 80
+```
