@@ -1,0 +1,162 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0" version="29.3.4">
+  <diagram name="Página-1" id="GpvpVRAxrXUIYbkSuSuW">
+    <mxGraphModel dx="2653" dy="663" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-1" parent="1" style="swimlane;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="WORKER NODE" vertex="1">
+          <mxGeometry height="560" width="646" x="34" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-13" edge="1" parent="Lddxv4ekrXb4aif-Stu1-1" source="Lddxv4ekrXb4aif-Stu1-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=blockThin;endFill=0;dashed=1;fontFamily=Verdana;" target="Lddxv4ekrXb4aif-Stu1-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-8" parent="Lddxv4ekrXb4aif-Stu1-1" style="whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Service" vertex="1">
+          <mxGeometry height="40" width="120" x="86" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="4eho9OQTzARfbOa3SZmJ-2" edge="1" parent="Lddxv4ekrXb4aif-Stu1-1" source="Lddxv4ekrXb4aif-Stu1-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=blockThin;endFill=0;" target="4eho9OQTzARfbOa3SZmJ-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-12" parent="Lddxv4ekrXb4aif-Stu1-1" style="whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Endpoint" vertex="1">
+          <mxGeometry height="40" width="120" x="86" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="4eho9OQTzARfbOa3SZmJ-4" edge="1" parent="Lddxv4ekrXb4aif-Stu1-1" source="Lddxv4ekrXb4aif-Stu1-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=1 2;endArrow=circlePlus;endFill=0;endSize=2;" target="Lddxv4ekrXb4aif-Stu1-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="206" y="280" />
+              <mxPoint x="266" y="280" />
+              <mxPoint x="266" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-22" parent="Lddxv4ekrXb4aif-Stu1-1" style="whiteSpace=wrap;html=1;fontFamily=Verdana;container=0;spacing=0;" value="&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;div&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; kube-proxy&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;hr&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); line-height: 50%;&quot;&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;DaemonSet&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="146" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-23" edge="1" parent="Lddxv4ekrXb4aif-Stu1-1" source="Lddxv4ekrXb4aif-Stu1-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=1 2;endArrow=circlePlus;endFill=0;startArrow=circlePlus;startFill=0;fontFamily=Verdana;endSize=2;startSize=2;" target="Lddxv4ekrXb4aif-Stu1-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-24" parent="Lddxv4ekrXb4aif-Stu1-1" style="whiteSpace=wrap;html=1;fontFamily=Verdana;container=0;spacing=0;" value="&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;div&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; Agente CNI&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;hr&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); line-height: 50%;&quot;&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;DaemonSet&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="446" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-32" edge="1" parent="Lddxv4ekrXb4aif-Stu1-1" source="Lddxv4ekrXb4aif-Stu1-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=blockThin;endFill=0;fontFamily=Verdana;" target="Lddxv4ekrXb4aif-Stu1-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-33" connectable="0" parent="Lddxv4ekrXb4aif-Stu1-32" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Verdana;" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;Ejecuta este binario cuando se crea un POD&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2024" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-28" parent="Lddxv4ekrXb4aif-Stu1-1" style="whiteSpace=wrap;html=1;fontFamily=Verdana;container=0;spacing=0;" value="&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;div&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; &lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 0, 0));&quot;&gt;kubelet&lt;/font&gt;&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;hr&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); line-height: 50%;&quot;&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;Servicio systemd&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="86" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-39" edge="1" parent="Lddxv4ekrXb4aif-Stu1-1" source="Lddxv4ekrXb4aif-Stu1-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=blockThin;endFill=0;" target="4eho9OQTzARfbOa3SZmJ-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="366" y="200" />
+              <mxPoint x="366" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-29" parent="Lddxv4ekrXb4aif-Stu1-1" style="whiteSpace=wrap;html=1;fontFamily=Verdana;container=0;spacing=0;" value="&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;div&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp;Binarios CNI&amp;nbsp; &amp;nbsp;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;hr&gt;&lt;/div&gt;&lt;div&gt;&lt;font size=&quot;1&quot;&gt;Ruta linux&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="446" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-37" parent="Lddxv4ekrXb4aif-Stu1-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Verdana;fontSize=10;" value="&lt;font&gt;calico /&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;cilium /&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;flannel&lt;/span&gt;" vertex="1">
+          <mxGeometry height="20" width="125" x="445" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="4eho9OQTzARfbOa3SZmJ-1" parent="Lddxv4ekrXb4aif-Stu1-1" style="whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Pod" vertex="1">
+          <mxGeometry height="40" width="120" x="86" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="4eho9OQTzARfbOa3SZmJ-11" edge="1" parent="Lddxv4ekrXb4aif-Stu1-1" source="4eho9OQTzARfbOa3SZmJ-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=1 4;endArrow=none;endFill=0;" target="Lddxv4ekrXb4aif-Stu1-22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="98" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4eho9OQTzARfbOa3SZmJ-9" parent="Lddxv4ekrXb4aif-Stu1-1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Verdana;fontSize=9;spacingLeft=10;" value="&lt;span&gt;1. Observa services y endpoints&lt;/span&gt;&lt;div&gt;2. Crea reglas iptables/IPVS&lt;br&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="35" width="164" x="16" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-2" parent="1" style="swimlane;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="MASTER NODE" vertex="1">
+          <mxGeometry height="400" width="760" x="-760" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-4" parent="Lddxv4ekrXb4aif-Stu1-2" style="whiteSpace=wrap;html=1;fontFamily=Verdana;container=0;" value="&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;b style=&quot;&quot;&gt;kube-apiserver&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;hr&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; font-size: 8px; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;-&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 8px;&quot;&gt;-service-cluster-ip-range=10.96.0.0/12&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="180" x="60" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-9" parent="Lddxv4ekrXb4aif-Stu1-2" style="whiteSpace=wrap;html=1;fontFamily=Verdana;container=0;spacing=0;" value="&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp;kube-dns&amp;nbsp;&amp;nbsp;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;hr&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;Deployment&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="525" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-15" parent="Lddxv4ekrXb4aif-Stu1-2" style="whiteSpace=wrap;html=1;fontFamily=Verdana;container=0;" value="&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;b style=&quot;&quot;&gt;etcd&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;hr&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;servicecidrs.networking.k8s.io&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="150" x="500" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-16" edge="1" parent="Lddxv4ekrXb4aif-Stu1-2" source="Lddxv4ekrXb4aif-Stu1-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;endArrow=async;endFill=0;dashed=1;fontFamily=Verdana;dashPattern=1 4;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="Lddxv4ekrXb4aif-Stu1-15" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-520" y="165" as="sourcePoint" />
+            <mxPoint x="340" y="125.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-18" connectable="0" parent="Lddxv4ekrXb4aif-Stu1-16" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Verdana;" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;serviceCIDR&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0054" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-27" parent="Lddxv4ekrXb4aif-Stu1-2" style="whiteSpace=wrap;html=1;fontFamily=Verdana;container=0;spacing=0;" value="&lt;div style=&quot;line-height: 50%;&quot;&gt;&lt;div&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; &lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 0, 0));&quot;&gt;kubelet&lt;/font&gt;&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;hr&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); line-height: 50%;&quot;&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;Servicio systemd&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="90" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="4eho9OQTzARfbOa3SZmJ-16" edge="1" parent="Lddxv4ekrXb4aif-Stu1-2" source="4eho9OQTzARfbOa3SZmJ-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;dashed=1;dashPattern=1 4;" target="Lddxv4ekrXb4aif-Stu1-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4eho9OQTzARfbOa3SZmJ-15" parent="Lddxv4ekrXb4aif-Stu1-2" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Verdana;fontSize=9;spacingLeft=10;" value="&lt;span&gt;1. Resolucion DNS&lt;/span&gt;&lt;div&gt;&lt;span&gt;2. Tiene IP DNS → /etc/resvolv.conf&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&amp;nbsp; &amp;nbsp; [Que se inyecta en el POD]&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="35" width="180" x="280" y="232.5" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-11" edge="1" parent="1" source="Lddxv4ekrXb4aif-Stu1-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=blockThin;endFill=0;fontFamily=Verdana;" target="Lddxv4ekrXb4aif-Stu1-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-590" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-21" connectable="0" parent="Lddxv4ekrXb4aif-Stu1-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Verdana;" value="&lt;font style=&quot;font-size: 9px;&quot;&gt;1. Crea el Service&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;2. Asigna un IP libre del &lt;b&gt;serviceCIDR &lt;/b&gt;como&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;font-size: 9px; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;ClusterIp&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;3. Persiste el objeto en &lt;b style=&quot;&quot;&gt;etcd&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2976" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-25" edge="1" parent="1" source="Lddxv4ekrXb4aif-Stu1-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=blockThin;endFill=0;fontFamily=Verdana;" target="4eho9OQTzARfbOa3SZmJ-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-630" y="530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4eho9OQTzARfbOa3SZmJ-13" connectable="0" parent="Lddxv4ekrXb4aif-Stu1-25" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 9px;&quot; face=&quot;Verdana&quot;&gt;1. Crea el objeto POD (objeto virtual)&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot; face=&quot;Verdana&quot;&gt;2. Persiste esta definición en etcd&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0998" y="2" as="geometry">
+            <mxPoint x="138" y="-18" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-30" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Verdana;fontSize=9;spacingLeft=3;" value="&lt;font face=&quot;Verdana&quot;&gt;1. Mantiene el pool de IPs -&amp;nbsp;&lt;/font&gt;IPAM&lt;font face=&quot;Verdana&quot;&gt;&amp;nbsp;&lt;/font&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;(Reserva y librea IPs)&lt;/span&gt;&lt;div&gt;&lt;font face=&quot;Verdana&quot;&gt;2. Maniente el dataplane para conectividad entre Pods&lt;br&gt;2. Mantiene la infraestructura dataplane (rutas, tuneles ,eBPF)&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Verdana&quot;&gt;3. Ajusta NetworkPolicies (allow/deny rules)&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="300" x="700" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-31" edge="1" parent="1" source="Lddxv4ekrXb4aif-Stu1-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=1 4;endArrow=none;endFill=0;fontFamily=Verdana;endSize=2;" target="Lddxv4ekrXb4aif-Stu1-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-35" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Verdana;fontSize=9;spacingLeft=3;" value="&lt;span&gt;1. Solicita una IP (POD&lt;/span&gt;&lt;div&gt;&lt;span&gt;2. Crea interfaces veth&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;3. Asocia el Pod a la red&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="45" width="126" x="701" y="217.5" as="geometry" />
+        </mxCell>
+        <mxCell id="Lddxv4ekrXb4aif-Stu1-36" edge="1" parent="1" source="Lddxv4ekrXb4aif-Stu1-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=1 4;endArrow=none;endFill=0;fontFamily=Verdana;" target="Lddxv4ekrXb4aif-Stu1-35">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4eho9OQTzARfbOa3SZmJ-12" edge="1" parent="1" source="Lddxv4ekrXb4aif-Stu1-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=blockThin;endFill=0;" target="4eho9OQTzARfbOa3SZmJ-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-720" y="100" />
+              <mxPoint x="-720" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4eho9OQTzARfbOa3SZmJ-14" connectable="0" parent="4eho9OQTzARfbOa3SZmJ-12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 9px;&quot; face=&quot;Verdana&quot;&gt;1. Crea el POD real en el nodo&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot; face=&quot;Verdana&quot;&gt;2. Crea contenedores&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot; face=&quot;Verdana&quot;&gt;3. Monta volúmenes&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1692" as="geometry">
+            <mxPoint x="133" y="20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
