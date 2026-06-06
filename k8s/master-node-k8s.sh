@@ -26,9 +26,8 @@ Settings → Network Adapter → Bridged → Replicate physical network
 # ===================================================================================================== #
 
 # ---------------------------- RENAME MASTER NODE ----------------------------
-$
 # Cambia el nombre la virtual machine [localhost] > [master.amigo.programador]
-hostnamectl set-hostname master
+hostnamectl set-hostname amigokloud-master
 
 # ---------------------------- RESOLUCION DNS ----------------------------
 
@@ -36,19 +35,12 @@ hostnamectl set-hostname master
 # >> → agrega contendio al final del archivo | > → sobreescribe un archivo
 # /etc/hosts → archivo que sirve para resolver [nombre de dominio/alias] > [dirrecion IP]
 cat <<EOF >> /etc/hosts
-192.168.18.125 master
-192.168.18.126 worker
+192.168.18.130 amigokloud-master
 EOF
 
 # ---------------------------- DISABLE FIREWALL ----------------------------
 # Permite todo el trafico de red desde y hacia la VM
 sudo ufw disable
-
-# ---------------------------- DISABLE MEMORY SWAP ----------------------------
-# swapoff → desactiva memoria swap (memoria virtual del disco, kubernetes necesita memora RAM fisica)
-#           [RAM virtual(ssd/disco)] degrada el rendimiento brutalmente | [RAM fisica(real)] kubernetes evita la inestibilidad e inconesistencia
-# -a → desactiva todas las areas swap activas en el sistema Linux
-swapoff -a
 
 # vim → abre un archivo en un editor de texto del terminal
 # /etc/fstab → archivo que define los recursos de almacenamiento que Linux montara automaticamente al arrancar
@@ -56,6 +48,11 @@ swapoff -a
 vim /etc/fstab
 /swap.img      none    swap    sw      0       0 #IMPORTANTE: comentar esta linea 
 
+# ---------------------------- DISABLE MEMORY SWAP ----------------------------
+# swapoff → desactiva memoria swap (memoria virtual del disco, kubernetes necesita memora RAM fisica)
+#           [RAM virtual(ssd/disco)] degrada el rendimiento brutalmente | [RAM fisica(real)] kubernetes evita la inestibilidad e inconesistencia
+# -a → desactiva todas las areas swap activas en el sistema Linux
+swapoff -a
 
 # ========================================================================================================= #
 # ========================================  INSTALACION containerd ======================================== #
@@ -100,6 +97,8 @@ cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables=1 
 net.ipv4.ip_forward=1
 net.bridge.bridge-nf-call-iptables=1
+overlay
+br_netfilter
 EOF
 
 # OJO → Puede que no se carge las configuraciones en sysctl, prueba ejecutando: 
@@ -159,7 +158,6 @@ apt-get update
 # -y → acepta automaticamente todas las confirmaciones
 apt-get install containerd.io -y
 
-
 # ---------------------------- CONFIGURE containerd ----------------------------
 
 # containerd → comando instalado en /usr/bin/containerd
@@ -167,19 +165,15 @@ apt-get install containerd.io -y
 # sudo tee /etc/containerd/config.toml → escribe la salida anterior en un archivo config.toml
 containerd config default | sudo tee /etc/containerd/config.toml > /dev/null
 
-
 # ---------------------------- MODIFY config.toml  ----------------------------
 # vim → modificamos el archivo de configuracion por defecto
 vim /etc/containerd/config.toml
 
-# [plugins."io.containerd.grpc.v1.cri".containerd]
 # [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
 snapshotter = "overlayfs"
 
-# [plugins.'io.containerd.cri.v1.runtime'.containerd]
 # [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options]
 SystemdCgroup = true
-
 
 # ---------------------------- START containerd ----------------------------
 # systemctl → sistema gestion de servicios de inicializacion
@@ -233,6 +227,7 @@ apt-mark hold kubelet kubeadm kubectl
 # [Ejecutable real] ExecStart=/usr/bin/kubelet → archivo binario
 systemctl enable --now kubelet
 
+systemctl status kubelet
 
 # ============================================================================================================= #
 # ====================================  INSTALL CONTROLPLANE [MASTER NODE] ==================================== #
@@ -271,10 +266,13 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 
 Then you can join any number of worker nodes by running the following on each as root:
 
-kubeadm join 192.168.18.120:6443 --token utg3h7.czfqgi7053m4irh5 \
-        --discovery-token-ca-cert-hash sha256:9216966ce06ab9f5fd0184a2e429af075947a6069e1e4d58657a95a58db0b847
+kubeadm join 192.168.18.130:6443 --token i76074.a5ck4k6bgz7s2ib8 \
+        --discovery-token-ca-cert-hash sha256:be9435d31c88b97796018937bda9ac34cb527ad279b638e40957b59e4bb74a28
 
-kubeadm join 192.168.18.125:6443 --token v4ai4r.jr5ve2wlw5xaj5ek --discovery-token-ca-cert-hash sha256:17dfb1e4d2e5c5baeaa56176a741a61bc00fca8fb829498b8d6508d7a465990b              
+# En este punto kubelet ya debe estar activado y corriendo
+systemctl status kubelet
+
+
 
 # ---------------------------- ENVIRONMENT VARIABLES ----------------------------
 # KUBECONFIG → Variable que indica que archivo de configuracion usar para conectarse al cluster. [Temporal]
@@ -299,73 +297,12 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 #         → Levanta kube-proxy | CoreDNS | kube
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
-# ============================================================================================== #
-# ====================================  INSTALL WORKER NODE ==================================== #
-# ============================================================================================== #
-
-# ---------------------------- JOIN WITH MASTER NODE ----------------------------
-# Comando que aparecio al finalizar la instalacion del master node
-kubeadm join 192.168.18.120:6443 --token utg3h7.czfqgi7053m4irh5 --discovery-token-ca-cert-hash sha256:9216966ce06ab9f5fd0184a2e429af075947a6069e1e4d58657a95a58db0b847
-
-# Validamos que los nodos[VM] se encuentren en estado Ready
+# Luego de instalar calico ya deben responder los comandos kubectl
+# Valida que esta respondiendo el kube-apiserver, usando algun comando
 kubectl get nodes
-
-# Si hay error en el get nodes, ejecutar
-## Permitir que el nodo master pueda copiar archivos al worker, edita el archivo
-vim /etc/ssh/sshd_config 
-
-PermitRootLogin yes
-
-## Dirigete al MASTER, copia su archivo admin.config
-cat /etc/kubernetes/admin.conf # Por defecto aqui esta su archivo de configuracion para acceder al api-server
-sudo cp /etc/kubernetes/admin.conf $HOME/admin.conf
-scp /etc/kubernetes/admin.conf workerx2@192.168.18.121:/home/workerx2/admin.conf # para copiarlo a otra maquina
-
-## En el WORKER, mover el archivo /home/worker1/admin.conf a $HOME/.kube
-mkdir -p $HOME/.kube
-sudo cp $HOME/admin.conf $HOME/.kube/config
-## Luego ya se podria acceder al api-server
-
-# Si quieres leer el archivo
-sudo chown master:master $HOME/.kube/config # Cambia el propietario
+# Deberia retornarte al menos el nodo master que acabas de configurar
 
 
-# Levanta Metric Server, sirve para recoletar metricas de uso de CPU, memoria (a traves del API Server)
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-
-# Editamos el pod de Metric Serve
-# - --kubelet-insecure-tls → Agregandolo en 'args' ya no verifica el certificado TLS de kubelet (acepta conexiones inseguras)
-kubectl edit deploy metrics-server -n kube-system 
-'
-  spec:
-   containers:
-   - args:
-     - --kubelet-insecure-tls 
-'
-
-
-
-## PROBLEMA NO LEVANTA EL WORKER NODE COMO READY
-root@master:/# kubectl get nodes
-NAME        STATUS     ROLES           AGE    VERSION
-master.x1   Ready      control-plane   8h     v1.30.14
-workerx2    NotReady   <none>          107m   v1.30.14
-
-# 1. Revisa los pods de kybe-system, alguno debe estar fallando 
-root@master:/# k get pods -n kube-system
-NAME                                       READY   STATUS              RESTARTS   AGE
-calico-kube-controllers-5b9b456c66-2hv6q   1/1     Running             0          9h
-calico-node-bnfn7                          0/1     Init:1/3            0          141m
-
-# 2. Si el problema es con calico, vuelve al nodo worker y revisa el archivo de configuracion de containerd
-vim /etc/containerd/config.toml
-
-# 3. Reinicia containerd
+# NOTA: Si tienes algun problema con el kubeadm init, intenta reiciando containredD y kubelet
 systemctl restart containerd
-systemctl status containerd
-
-# 4. El nodo worker ya deberia estar como ready
-root@master:/# kubectl get nodes
-NAME        STATUS   ROLES           AGE    VERSION
-master.x1   Ready    control-plane   9h     v1.30.14
-workerx2    Ready    <none>          142m   v1.30.14
+systemctl restart kubelet

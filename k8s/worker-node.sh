@@ -1,5 +1,5 @@
 # ======================================================================================================================== #
-# ====================================  INSTALAR VIRTUAL MACHINE [MASTER NODE] ==================================== #
+# ====================================  INSTALAR VIRTUAL MACHINE [WORKER NODE] ==================================== #
 # ======================================================================================================================== #
 
 # Instala VMWare o algun otro virtualizador de tu preferencia
@@ -22,13 +22,13 @@ Settings → Network Adapter → Bridged → Replicate physical network
 # En la parte de Network configuration ingresar una IPv4 Manualmente (para que sea estatica)
 
 # ===================================================================================================== #
-# ======================================  CONFIGURAR MASTER NODE ====================================== #
+# ======================================  CONFIGURAR LA VM WORKER ====================================== #
 # ===================================================================================================== #
 
 # ---------------------------- RENAME MASTER NODE ----------------------------
 $
 # Cambia el nombre la virtual machine [localhost] > [master.amigo.programador]
-hostnamectl set-hostname master
+hostnamectl set-hostname amigokloud-worker
 
 # ---------------------------- RESOLUCION DNS ----------------------------
 
@@ -36,19 +36,13 @@ hostnamectl set-hostname master
 # >> → agrega contendio al final del archivo | > → sobreescribe un archivo
 # /etc/hosts → archivo que sirve para resolver [nombre de dominio/alias] > [dirrecion IP]
 cat <<EOF >> /etc/hosts
-192.168.18.125 master
-192.168.18.126 worker
+192.168.18.130 amigokloud-master
+192.168.18.131 amigokloud-worker
 EOF
 
 # ---------------------------- DISABLE FIREWALL ----------------------------
 # Permite todo el trafico de red desde y hacia la VM
 sudo ufw disable
-
-# ---------------------------- DISABLE MEMORY SWAP ----------------------------
-# swapoff → desactiva memoria swap (memoria virtual del disco, kubernetes necesita memora RAM fisica)
-#           [RAM virtual(ssd/disco)] degrada el rendimiento brutalmente | [RAM fisica(real)] kubernetes evita la inestibilidad e inconesistencia
-# -a → desactiva todas las areas swap activas en el sistema Linux
-swapoff -a
 
 # vim → abre un archivo en un editor de texto del terminal
 # /etc/fstab → archivo que define los recursos de almacenamiento que Linux montara automaticamente al arrancar
@@ -56,6 +50,11 @@ swapoff -a
 vim /etc/fstab
 /swap.img      none    swap    sw      0       0 #IMPORTANTE: comentar esta linea 
 
+# ---------------------------- DISABLE MEMORY SWAP ----------------------------
+# swapoff → desactiva memoria swap (memoria virtual del disco, kubernetes necesita memora RAM fisica)
+#           [RAM virtual(ssd/disco)] degrada el rendimiento brutalmente | [RAM fisica(real)] kubernetes evita la inestibilidad e inconesistencia
+# -a → desactiva todas las areas swap activas en el sistema Linux
+swapoff -a
 
 # ========================================================================================================= #
 # ========================================  INSTALACION containerd ======================================== #
@@ -180,7 +179,6 @@ snapshotter = "overlayfs"
 # [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options]
 SystemdCgroup = true
 
-
 # ---------------------------- START containerd ----------------------------
 # systemctl → sistema gestion de servicios de inicializacion
 # enable → enlaza un programa al arranque del sistema (boot)
@@ -233,139 +231,31 @@ apt-mark hold kubelet kubeadm kubectl
 # [Ejecutable real] ExecStart=/usr/bin/kubelet → archivo binario
 systemctl enable --now kubelet
 
-
-# ============================================================================================================= #
-# ====================================  INSTALL CONTROLPLANE [MASTER NODE] ==================================== #
-# ============================================================================================================= #
-
-# ----------------------------  Convertir la VM en un Cluster de Kubernetes e inicializarlo como un nodo master ----------------------------
-# > Instala y configura componentes criticos de ControlPlane como static pods 
-#   | kube-apiserver | kube-control-manager | kube-scheduler | etcd  |
-# > Configura certificados para la comunicacion dentro del cluster 
-#   | PKI (Public Key Infrastructure) | TLS (Transport Layer Security) |
-# > Genera kubeconfig files en /etc/kubernetes/*.conf > Define como cada componente debe hablar con kube-apiserver
-#   | Direccion URL del API server | Certificado TLS, claves privadas | Client identity [usuario logico de kubernetes (no de Linux)] | context [cluster+user] |
-# > Arranca kubelet usando el archivo kubelet.conf
-# > Despliega Addons base del sistema 
-#   | CoreDNS [sirve para resolver nombre de otros servicios service.default.svc.cluster.example] | kube-proxy [para que los services direcciones trafico hacia los pods] |
-# > Agrega taints al ControlPlane
-# > Genera token bootstrap > Usado por worker nodes para autenticarse temporalmente con kube-apiserver > Envia un CSR para pedir un certificado real X.509 [Autenticacion permanente]
-kubeadm init
-
-# Luego de la instalacion generara un comando kubeadm join para establecer los worker nodes
-Your Kubernetes control-plane has initialized successfully!
-
-To start using your cluster, you need to run the following as a regular user:
-
-  mkdir -p $HOME/.kube
-  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-  sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-Alternatively, if you are the root user, you can run:
-
-  export KUBECONFIG=/etc/kubernetes/admin.conf
-
-You should now deploy a pod network to the cluster.
-Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-  https://kubernetes.io/docs/concepts/cluster-administration/addons/
-
-Then you can join any number of worker nodes by running the following on each as root:
-
-kubeadm join 192.168.18.120:6443 --token utg3h7.czfqgi7053m4irh5 \
-        --discovery-token-ca-cert-hash sha256:9216966ce06ab9f5fd0184a2e429af075947a6069e1e4d58657a95a58db0b847
-
-kubeadm join 192.168.18.125:6443 --token v4ai4r.jr5ve2wlw5xaj5ek --discovery-token-ca-cert-hash sha256:17dfb1e4d2e5c5baeaa56176a741a61bc00fca8fb829498b8d6508d7a465990b              
-
-# ---------------------------- ENVIRONMENT VARIABLES ----------------------------
-# KUBECONFIG → Variable que indica que archivo de configuracion usar para conectarse al cluster. [Temporal]
-# /etc/kubernetes/admin.conf → archivo kubeconfig que contiene informacion necesaria para que un cliente se conecte al API Server de Kubernetes
-export KUBECONFIG=/etc/kubernetes/admin.conf
-
-# /etc/kubernetes/admin.conf → config pertenece al usuario root [kubeadm] lo genera con permisos root
-# $HOME/.kube/config → por defecto kubectl busca en esta direccion el archivo de configuracion [Persistente]
-# chown usuario:grupo archivo → Cambiar propietario de un archivo/directorio
-# $(id -u) → usuario actual
-# $(id -g) → grupo actual
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-
-# ---------------------------- INSTALL CALICO ----------------------------
-# Instala → [CNI plugin] Asigna IP a PODs
-#         → [Bridge] Configura el bridge (cni0)
-#         → [Routing Table] Configura las rutas
-#         → [iptalbes] Configura reglas
-#         → Levanta kube-proxy | CoreDNS | kube
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
-
 # ============================================================================================== #
 # ====================================  INSTALL WORKER NODE ==================================== #
 # ============================================================================================== #
 
 # ---------------------------- JOIN WITH MASTER NODE ----------------------------
 # Comando que aparecio al finalizar la instalacion del master node
-kubeadm join 192.168.18.120:6443 --token utg3h7.czfqgi7053m4irh5 --discovery-token-ca-cert-hash sha256:9216966ce06ab9f5fd0184a2e429af075947a6069e1e4d58657a95a58db0b847
+kubeadm join 192.168.18.130:6443 --token i76074.a5ck4k6bgz7s2ib8 \
+        --discovery-token-ca-cert-hash sha256:be9435d31c88b97796018937bda9ac34cb527ad279b638e40957b59e4bb74a28
 
-# Validamos que los nodos[VM] se encuentren en estado Ready
-kubectl get nodes
+NOTA: Si existe algun error al hacer kubeadm join
+# Valida el swap con este comando, debe salir → Swap 0B
+free -h 
 
-# Si hay error en el get nodes, ejecutar
-## Permitir que el nodo master pueda copiar archivos al worker, edita el archivo
-vim /etc/ssh/sshd_config 
+# Valida los comandos bridge, forward esten como 1
+sysctl --system
+# debe mostrar asi
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-iptables = 1
 
-PermitRootLogin yes
-
-## Dirigete al MASTER, copia su archivo admin.config
-cat /etc/kubernetes/admin.conf # Por defecto aqui esta su archivo de configuracion para acceder al api-server
-sudo cp /etc/kubernetes/admin.conf $HOME/admin.conf
-scp /etc/kubernetes/admin.conf workerx2@192.168.18.121:/home/workerx2/admin.conf # para copiarlo a otra maquina
-
-## En el WORKER, mover el archivo /home/worker1/admin.conf a $HOME/.kube
-mkdir -p $HOME/.kube
-sudo cp $HOME/admin.conf $HOME/.kube/config
-## Luego ya se podria acceder al api-server
-
-# Si quieres leer el archivo
-sudo chown master:master $HOME/.kube/config # Cambia el propietario
-
-
-# Levanta Metric Server, sirve para recoletar metricas de uso de CPU, memoria (a traves del API Server)
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-
-# Editamos el pod de Metric Serve
-# - --kubelet-insecure-tls → Agregandolo en 'args' ya no verifica el certificado TLS de kubelet (acepta conexiones inseguras)
-kubectl edit deploy metrics-server -n kube-system 
-'
-  spec:
-   containers:
-   - args:
-     - --kubelet-insecure-tls 
-'
-
-
-
-## PROBLEMA NO LEVANTA EL WORKER NODE COMO READY
-root@master:/# kubectl get nodes
-NAME        STATUS     ROLES           AGE    VERSION
-master.x1   Ready      control-plane   8h     v1.30.14
-workerx2    NotReady   <none>          107m   v1.30.14
-
-# 1. Revisa los pods de kybe-system, alguno debe estar fallando 
-root@master:/# k get pods -n kube-system
-NAME                                       READY   STATUS              RESTARTS   AGE
-calico-kube-controllers-5b9b456c66-2hv6q   1/1     Running             0          9h
-calico-node-bnfn7                          0/1     Init:1/3            0          141m
-
-# 2. Si el problema es con calico, vuelve al nodo worker y revisa el archivo de configuracion de containerd
-vim /etc/containerd/config.toml
-
-# 3. Reinicia containerd
+# Reinicia containerD
 systemctl restart containerd
-systemctl status containerd
 
-# 4. El nodo worker ya deberia estar como ready
-root@master:/# kubectl get nodes
-NAME        STATUS   ROLES           AGE    VERSION
-master.x1   Ready    control-plane   9h     v1.30.14
-workerx2    Ready    <none>          142m   v1.30.14
+# Resetea el intento de kubeadm join
+kubeadm reset -f
+
+# Si perdiste el token, vuelve a generarlo en el nodo master
+kubeadm token create --print-join-command
