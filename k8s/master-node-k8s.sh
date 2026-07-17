@@ -279,13 +279,16 @@ systemctl status kubelet
 # /etc/kubernetes/admin.conf → archivo kubeconfig que contiene informacion necesaria para que un cliente se conecte al API Server de Kubernetes
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
-# /etc/kubernetes/admin.conf → config pertenece al usuario root [kubeadm] lo genera con permisos root
-# $HOME/.kube/config → por defecto kubectl busca en esta direccion el archivo de configuracion [Persistente]
-# chown usuario:grupo archivo → Cambiar propietario de un archivo/directorio
+# Creamos esta carpeta, por defecto kubectl busca en esta direccion el archivo de configuracion
+mkdir -p $HOME/.kube
+
+# kubeadm init genero el archivo → admin.conf (tiene las llaves criptograficas de seguridad)
+# Copiamos el archivo original a la ruta de $HOME (es la que utiliza kubectl)
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+
+# Configuramos los permisos del archivo (k8s es muy estricto con la seguridad de este archivo)
 # $(id -u) → usuario actual
 # $(id -g) → grupo actual
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 
